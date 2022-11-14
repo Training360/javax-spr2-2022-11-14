@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
@@ -56,5 +57,10 @@ public class EmployeeService {
         Employee employee = employeeRepository.findByIdWithAddresses(id)
                 .orElseThrow(() -> new NotFoundException("Employee not found with id: " + id));
         employeeRepository.delete(employee);
+    }
+
+    @Scheduled(fixedRate = 10_000)
+    public void logNumberOfEmployees() {
+        log.info("The number of employees: {}", employeeRepository.count());
     }
 }

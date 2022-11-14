@@ -5,20 +5,31 @@ import empapp.dto.EmployeeDto;
 import empapp.dto.UpdateEmployeeCommand;
 import empapp.entity.Employee;
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class EmployeeService {
 
     private EmployeeRepository employeeRepository;
 
     private EmployeeMapper employeeMapper;
 
+    private RemoteSynchService remoteSynchService;
+
     public EmployeeDto createEmployee(CreateEmployeeCommand command) {
         Employee employee = employeeMapper.toEmployee(command);
+
+        log.info("EmployeeService thread: {}", Thread.currentThread().getName());
+        log.info("RemoteSynchService reference: {}", remoteSynchService.getClass().getName());
+        remoteSynchService.sync(employee);
+
         employeeRepository.save(employee);
         return employeeMapper.toEmployeeDto(employee);
     }

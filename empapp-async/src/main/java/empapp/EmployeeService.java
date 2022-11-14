@@ -28,7 +28,7 @@ public class EmployeeService {
 
         log.info("EmployeeService thread: {}", Thread.currentThread().getName());
         log.info("RemoteSynchService reference: {}", remoteSynchService.getClass().getName());
-        remoteSynchService.sync(employee);
+        remoteSynchService.syncProgrammable(employee);
 
         employeeRepository.save(employee);
         return employeeMapper.toEmployeeDto(employee);

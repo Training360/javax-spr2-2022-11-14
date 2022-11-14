@@ -1,0 +1,46 @@
+### List all employees
+
+GET http://localhost:8080/api/employees
+Accept: application/json
+
+### Find employee by id
+
+GET http://localhost:8080/api/employees/5
+Accept: application/json
+
+
+### Create employee
+
+POST http://localhost:8080/api/employees
+Content-Type: application/json
+
+{
+  "name": "Jane Doe"
+}
+
+### Create employee with address
+
+POST http://localhost:8080/api/employees
+Content-Type: application/json
+
+{
+  "name": "Jane Doe",
+  "addresses": [
+    {
+      "city": "Budapest"
+    }
+  ]
+}
+
+### Update
+
+PUT http://localhost:8080/api/employees/9
+Content-Type: application/json
+
+{
+  "name": "Jane Doe 2"
+}
+
+### Delete
+
+DELETE http://localhost:8080/api/employees/9

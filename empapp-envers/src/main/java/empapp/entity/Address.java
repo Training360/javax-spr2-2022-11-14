@@ -2,6 +2,7 @@ package empapp.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
 
@@ -10,6 +11,7 @@ import static lombok.AccessLevel.PRIVATE;
 @Entity
 @Data
 @NoArgsConstructor(access = PRIVATE)
+@Audited
 public class Address {
 
     @Id

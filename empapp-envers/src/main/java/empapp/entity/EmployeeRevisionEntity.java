@@ -7,6 +7,7 @@ import org.hibernate.envers.RevisionTimestamp;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.util.Date;
 
@@ -16,7 +17,7 @@ import java.util.Date;
 public class EmployeeRevisionEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @RevisionNumber
     private int id;
 

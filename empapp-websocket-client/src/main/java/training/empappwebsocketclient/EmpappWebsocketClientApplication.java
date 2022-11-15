@@ -12,6 +12,9 @@ import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 @SpringBootApplication
 @Slf4j
@@ -31,9 +34,21 @@ public class EmpappWebsocketClientApplication implements CommandLineRunner {
 		var client = new WebSocketStompClient(new SockJsClient(List.of(new WebSocketTransport(new StandardWebSocketClient()))));
 		client.setMessageConverter(new MappingJackson2MessageConverter()); // JSON
 		var sessionHandler = new MessageStompSessionHandler();
-		client.connect("ws://localhost:8080/websocket-endpoint", sessionHandler);
+		var future = client.connect("ws://localhost:8080/websocket-endpoint", sessionHandler);
 
-		new Scanner(System.in).nextLine();
+		var scanner = new Scanner(System.in);
+		try {
+			var session = future.get(2, TimeUnit.SECONDS);
+
+			var input = "";
+			while (!input.equals("exit")) {
+				input = scanner.nextLine();
+				session.send("/app/messages", new MessageCommand(input));
+			}
+
+		} catch (InterruptedException | ExecutionException | TimeoutException e) {
+			log.error("Error get session", e);
+		}
 	}
 
 

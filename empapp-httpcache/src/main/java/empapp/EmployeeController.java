@@ -5,6 +5,7 @@ import empapp.dto.EmployeeDto;
 import empapp.dto.UpdateEmployeeCommand;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/api/employees")
@@ -26,8 +29,14 @@ public class EmployeeController {
     }
 
     @GetMapping("/{id}")
-    public EmployeeDto findEmployeeById(@PathVariable("id") long id) {
-        return employeeService.findEmployeeById(id);
+    public ResponseEntity<EmployeeDto> findEmployeeById(@PathVariable("id") long id) {
+        var employee = employeeService.findEmployeeById(id);
+        return ResponseEntity
+                .ok()
+                .header("Request-Id", UUID.randomUUID().toString())
+                .cacheControl(CacheControl.maxAge(1, TimeUnit.HOURS))
+                .eTag(Integer.toString(employee.hashCode()))
+                .body(employee);
     }
 
     @PostMapping // nem idempotens

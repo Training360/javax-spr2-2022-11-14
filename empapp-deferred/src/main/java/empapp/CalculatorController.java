@@ -19,8 +19,10 @@ public class CalculatorController {
     public DeferredResult<Integer> calculate() {
         log.info("calculate start");
         var result = new DeferredResult<Integer>();
-        calculatorService.calculate(result);
+        calculatorService.calculate(result); // Indít egy új szálat
         log.info("calculate end");
         return result;
+        // Felszabadul a http kiszolgáló szál
+        // HttpRequest ugyanúgy aktív marad
     }
 }

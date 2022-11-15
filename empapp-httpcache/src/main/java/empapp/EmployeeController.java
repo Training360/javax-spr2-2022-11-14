@@ -35,7 +35,8 @@ public class EmployeeController {
                 .ok()
                 .header("Request-Id", UUID.randomUUID().toString())
                 .cacheControl(CacheControl.maxAge(1, TimeUnit.HOURS))
-                .eTag(Integer.toString(employee.hashCode()))
+                //.eTag(Integer.toString(employee.hashCode()))
+                .eTag(Integer.toString(employee.getVersion()))
                 .body(employee);
     }
 

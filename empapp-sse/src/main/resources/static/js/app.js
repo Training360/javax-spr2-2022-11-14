@@ -1,5 +1,5 @@
 window.onload = function() {
-    const source = new EventSource("api/employees/messages");
+    const source = new EventSource("http://localhost:8080/api/employees/messages");
     source.addEventListener("message",
         function(event) {
             const name = JSON.parse(event.data).employeeName;

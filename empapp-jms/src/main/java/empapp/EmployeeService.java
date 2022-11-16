@@ -17,9 +17,14 @@ public class EmployeeService {
 
     private EmployeeMapper employeeMapper;
 
+    private EventStoreGateway eventStoreGateway;
+
     public EmployeeDto createEmployee(CreateEmployeeCommand command) {
         Employee employee = employeeMapper.toEmployee(command);
         employeeRepository.save(employee);
+
+        eventStoreGateway.sendMessage("Employee has been created: " + command);
+
         return employeeMapper.toEmployeeDto(employee);
     }
 
